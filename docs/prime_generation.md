@@ -165,7 +165,6 @@ def generate_gost_prime(target_bit_length, progress_callback=None):
             
             if len(p_next.to_string(2)) > t_next:
                 # p перескочило битность, начинаем сначала для этого уровня
-                # (в реальном коде может потребоваться более сложная логика)
                 N, _ = divide(min_p_next, p_i) 
                 if divide(N, two)[1].to_string(base) != "0": N = add(N, LargeNumber("1", base))
                 continue
