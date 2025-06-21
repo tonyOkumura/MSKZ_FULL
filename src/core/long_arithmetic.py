@@ -241,40 +241,49 @@ def gcd(a: LargeNumber, b: LargeNumber) -> LargeNumber:
     base = 10
     zero = LargeNumber("0", base)
     
-    while b.to_string(base) != zero.to_string(base):
-        _, remainder = divide(a, b, base)
-        a = b
-        b = remainder
-        
-    return a 
+    # Работаем с абсолютными значениями
+    a_abs = LargeNumber(a.to_string(base).replace('-', ''), base)
+    b_abs = LargeNumber(b.to_string(base).replace('-', ''), base)
 
-def extended_gcd(a: LargeNumber, b: LargeNumber):
+    while b_abs.to_string(base) != zero.to_string(base):
+        _, remainder = divide(a_abs, b_abs, base)
+        a_abs = b_abs
+        b_abs = remainder
+        
+    return a_abs 
+
+def extended_gcd(a: LargeNumber, b: LargeNumber) -> (LargeNumber, LargeNumber, LargeNumber):
     """
-    Расширенный алгоритм Евклида. Возвращает (d, x, y), где d = НОД(a,b) = ax + by.
+    Выполняет расширенный алгоритм Евклида.
+    Возвращает (g, x, y), где g = НОД(a, b) и a*x + b*y = g.
     """
     base = 10
     zero = LargeNumber("0", base)
-    
+    one = LargeNumber("1", base)
+
+    # Инициализация коэффициентов Безу
+    x, last_x = LargeNumber("0", base), LargeNumber("1", base)
+    y, last_y = LargeNumber("1", base), LargeNumber("0", base)
+
+    # Алгоритм работает с копиями, чтобы не изменять оригинальные числа
     a_copy = LargeNumber(a.to_string(base), base)
     b_copy = LargeNumber(b.to_string(base), base)
 
-    if b_copy.to_string(base) == zero.to_string(base):
-        return a_copy, LargeNumber("1", base), LargeNumber("0", base)
+    while b_copy.to_string(base) != "0":
+        quotient, remainder = divide(a_copy, b_copy, base)
+        
+        a_copy, b_copy = b_copy, remainder
 
-    x0, x1 = LargeNumber("1", base), LargeNumber("0", base)
-    y0, y1 = LargeNumber("0", base), LargeNumber("1", base)
-    
-    while b_copy.to_string(base) != zero.to_string(base):
-        q, r = divide(a_copy, b_copy, base)
+        # Обновляем коэффициенты x
+        temp_x = x
+        x = subtract(last_x, multiply(quotient, x, base), base)
+        last_x = temp_x
+
+        # Обновляем коэффициенты y
+        temp_y = y
+        y = subtract(last_y, multiply(quotient, y, base), base)
+        last_y = temp_y
         
-        a_copy, b_copy = b_copy, r
-        
-        # x_new = x0 - q*x1
-        x_new = subtract(x0, multiply(q, x1, base), base)
-        x0, x1 = x1, x_new
-        
-        # y_new = y0 - q*y1
-        y_new = subtract(y0, multiply(q, y1, base), base)
-        y0, y1 = y1, y_new
-        
-    return a_copy, x0, y0 
+    # a_copy теперь содержит НОД
+    # last_x и last_y - коэффициенты Безу
+    return a_copy, last_x, last_y 

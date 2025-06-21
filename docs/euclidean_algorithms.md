@@ -46,9 +46,8 @@ def gcd(a: LargeNumber, b: LargeNumber) -> LargeNumber:
 
 ### Алгоритм
 
-Алгоритм является рекурсивным или итеративным расширением стандартного алгоритма Евклида. На каждом шаге он вычисляет не только остатки, но и коэффициенты для них.
+Алгоритм является итеративным расширением стандартного алгоритма Евклида. На каждом шаге он вычисляет не только остатки, но и коэффициенты для них.
 
-Итеративная версия:
 1. Инициализируем `(x, last_x) = (0, 1)` и `(y, last_y) = (1, 0)`.
 2. В цикле, пока `b` не ноль:
     a. Вычисляем частное `q = a // b`.
@@ -56,9 +55,7 @@ def gcd(a: LargeNumber, b: LargeNumber) -> LargeNumber:
     c. Обновляем коэффициенты: `(x, last_x) = (last_x - q*x, x)` и `(y, last_y) = (last_y - q*y, y)`.
 3. В конце `last_x` и `last_y` будут искомыми коэффициентами, а `a` — НОД.
 
-### Исходный код (Предполагаемая реализация)
-
-*Примечание: Эта функция, по-видимому, была удалена в ходе рефакторинга. Здесь представлена ее каноническая реализация для полноты документации.*
+### Исходный код
 
 ```python
 def extended_gcd(a: LargeNumber, b: LargeNumber) -> (LargeNumber, LargeNumber, LargeNumber):
@@ -70,6 +67,7 @@ def extended_gcd(a: LargeNumber, b: LargeNumber) -> (LargeNumber, LargeNumber, L
     zero = LargeNumber("0", base)
     one = LargeNumber("1", base)
 
+    # Инициализация коэффициентов Безу
     x, last_x = LargeNumber("0", base), LargeNumber("1", base)
     y, last_y = LargeNumber("1", base), LargeNumber("0", base)
 
@@ -80,8 +78,7 @@ def extended_gcd(a: LargeNumber, b: LargeNumber) -> (LargeNumber, LargeNumber, L
     while b_copy.to_string(base) != "0":
         quotient, remainder = divide(a_copy, b_copy, base)
         
-        a_copy = b_copy
-        b_copy = remainder
+        a_copy, b_copy = b_copy, remainder
 
         # Обновляем коэффициенты x
         temp_x = x

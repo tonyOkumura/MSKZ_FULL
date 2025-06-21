@@ -79,19 +79,21 @@ class CryptographicCalculatorWindow(QMainWindow):
             a = LargeNumber(a_str)
             b = LargeNumber(b_str)
 
-            # Стандартный алгоритм
-            gcd_res = gcd(a, b)
-            
-            # Расширенный алгоритм
+            # Расширенный алгоритм Евклида
             d, x, y = extended_gcd(a, b)
 
+            # НОД - это первый элемент результата
+            gcd_res = d
+
             result_text = (
-                f"НОД(a, b) = {gcd_res.to_string()}\n"
-                f"Расширенный алгоритм Евклида:\n"
-                f"  d = {d.to_string()}\n"
-                f"  x = {x.to_string()}\n"
-                f"  y = {y.to_string()}\n"
-                f"Проверка: {a_str}*({x.to_string()}) + {b_str}*({y.to_string()}) = {d.to_string()}"
+                f"<b>НОД(a, b) = {gcd_res.to_string()}</b><br><br>"
+                f"<b>Расширенный алгоритм Евклида:</b><br>"
+                f"  d = {d.to_string()}<br>"
+                f"  x = {x.to_string()}<br>"
+                f"  y = {y.to_string()}<br><br>"
+                f"<b>Проверка:</b><br>"
+                f"  a*x + b*y = d<br>"
+                f"  ({a_str}) * ({x.to_string()}) + ({b_str}) * ({y.to_string()}) = {d.to_string()}"
             )
             self.euclidean_result_label.setText(result_text)
             self.euclidean_result_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
