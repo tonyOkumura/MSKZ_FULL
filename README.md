@@ -40,7 +40,7 @@
 
 Откройте терминал (командную строку) и выполните команду:
 ```bash
-git clone [URL-вашего-репозитория]
+git clone https://github.com/tonyOkumura/MSKZ_FULL.git
 cd MSKZ_FULL
 ```
 Эта команда создаст папку `MSKZ_FULL` и загрузит в неё все файлы проекта.
